@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        
+        .main {
+            background-color: #f1e3f3;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+        }
+        
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 100px;
+            background-color: rgba(194, 187, 240, 0.4);
+            border-radius: 25px;
+        }
+
+        .questionsfield {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .field-container {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .field {
+            width: 275px;
+            height: 350px;
+            border: 2px solid #333;
+            margin: 10px;
+            padding: 10px;
+            text-align: center;
+            border-radius: 25px;
+            background-color: #8FB8ED;
+            border-color: #8FB8ED;
+        }
+
+        .question {
+            width: 250px;
+            height: 150px;
+            border: 2px solid #333;
+            margin: 10px;
+            padding: 10px;
+            text-align: center;
+            cursor: move;
+            border-radius: 25px;
+            background-color: #D6BFED;
+            border-color: #D6BFED;
+        }
+
+        .question:active {
+            opacity: 0.5;
+        }
+
+        #checkButton {
+            margin-top: 20px;
+            padding: 10px;
+            width:15%;
+            cursor: pointer;
+            background-color: #8FB8ED;
+            border-color: #8FB8ED;
+            position: inherit;
+            margin-left: 42.5%;
+        }
+    </style>
+    <title>Drag and Drop Game</title>
+</head>
+<body class="main">
+
+<div class="container">
+    <div class="questionsfield">
+        <div id="question1" class="question" draggable="true" ondragstart="drag(event)" data-correct-field="field5"> .items { background-color: red; }</div>
+        <div id="question2" class="question" draggable="true" ondragstart="drag(event)" data-correct-field="field2"> #item </div>
+        <div id="question3" class="question" draggable="true" ondragstart="drag(event)" data-correct-field="field4"> checkAnswer()</div>
+        <div id="question4" class="question" draggable="true" ondragstart="drag(event)" data-correct-field="field3"> const myCar1 = new car("Ford", 2013);</div>
+        <div id="question5" class="question" draggable="true" ondragstart="drag(event)" data-correct-field="field1"> let fruits = [apple, banana, orange]</div>
+    </div>
+
+    <div class="field-container">
+        <div id="field1" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"> Array</div>
+        <div id="field2" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"> Id </div>
+        <div id="field3" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"> Class</div>
+        <div id="field4" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"> Function</div>
+        <div id="field5" class="field" ondrop="drop(event)" ondragover="allowDrop(event)"> CSS code</div>
+    </div>
+</div>
+
+<button id="checkButton" onclick="checkAnswers()">Check</button>
+
+<div id="totalcount"> </div>
+
+<script> 
+    
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    function drag(event) {
+        event.dataTransfer.setData("text", event.target.id);
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        var data = event.dataTransfer.getData("text");
+        var draggedElement = document.getElementById(data);
+        var dropzone = event.target;
+
+        if (dropzone.classList.contains('field') && dropzone.children.length === 0) {
+            dropzone.appendChild(draggedElement);
+        }
+    }
+
+    let totalCount = 0;
+
+    function checkAnswers() {
+        var correctCount = 0;
+        var wrongCount = 0;
+
+        // Loop through all questions
+        var questions = document.querySelectorAll('.question');
+        var dropZone = document.querySelectorAll('.field')
+        questions.forEach(function(e) {
+            var correctFieldId = e.dataset.correctField;
+            var currentFieldId = e.parentNode.id;
+
+            if (correctFieldId === currentFieldId) {
+                correctCount++;
+            } else {
+              wrongCount++
+            }
+        });
+
+        console.log("Correct answers: " + correctCount);
+        console.log("Wrong answers: " + wrongCount);
+
+        let totalCount = `Correct answers: ${correctCount}   Wrong answers: ${wrongCount}`
+
+        document.getElementById("totalcount").innerHTML = totalCount
+    }
+
+    
+    
+</script>
+
+</body>
+</html>
